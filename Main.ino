@@ -23,6 +23,8 @@ void setup() {
   //SWSerial2.begin(9600);
   //start the serial output
   Serial.begin(9600);
+  
+  delay(5000);  // delays the robot for 5 seconds before moving as per competition rules
 }
 
 void loop() {
