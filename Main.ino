@@ -12,7 +12,7 @@ SabertoothSimplified ST1(SWSerial1); // Use SWSerial as the serial port.
 //SoftwareSerial SWSerial2(NOT_A_PIN, 10); // RX on no pin (unused), TX on pin 11 (to S1).
 //SabertoothSimplified ST2(SWSerial2); // Use SWSerial as the serial port.
 //ultrasonic pin
-const int pingPin = 3;
+const int pingPin = 13;
 
 int Power;
 long cm;
