@@ -14,8 +14,8 @@ SabertoothSimplified ST1(SWSerial1); // Use SWSerial as the serial port.
 //ultrasonic pin
 const int pingPin = 13;
 
-int Power;
-long cm;
+int Power;  // Power going into motors
+long cm;    // Distance in cm
 
 void setup() {
   //some setup for the motor library
@@ -31,7 +31,10 @@ void loop() {
 
   if (cm<10)
   {
+    // Robot will push opponent is less than 10cm
+    // !!! NEED TO ADD A PUSHING MECAHNISM TO THIS
     if (Power != 127)
+    // If power isn't the maximum
     {
       // Ramp from -127 to 127 (full reverse to full forward), waiting 20 ms (1/50th of a second) per value.
       for (int i = Power; i <= 127; i ++)
@@ -49,6 +52,8 @@ void loop() {
  cm=CheckDistance();
 
   if (cm>10)
+  // If robot is greater than 10cm away, start backing off.
+  // POTENTIALLY TAKE THIS OUT.
   {
     if (Power != 0)
     {
@@ -67,7 +72,7 @@ void loop() {
   
 }
 
-
+// Ultrasonic needs this for stuff
 long microsecondsToInches(long microseconds) {
   // According to Parallax's datasheet for the PING))), there are
   // 73.746 microseconds per inch (i.e. sound travels at 1130 feet per
@@ -76,7 +81,7 @@ long microsecondsToInches(long microseconds) {
   // See: http://www.parallax.com/dl/docs/prod/acc/28015-PING-v1.3.pdf
   return microseconds / 74 / 2;
 }
-
+// Ultrasonic needs this for stuff
 long microsecondsToCentimeters(long microseconds) {
   // The speed of sound is 340 m/s or 29 microseconds per centimeter.
   // The ping travels out and back, so to find the distance of the
