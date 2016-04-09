@@ -39,26 +39,34 @@ void loop(){
     if (LS1<1000 && RS1<1000)
     // Move backwards if front sees white
     {
-      digitalWrite(LED1, HIGH);
-      delay(80);
-      digitalWrite(LED1, LOW);
+      digitalWrite(rightMotor, HIGH);
+      //delay(80);
+      digitalWrite(leftMotor, HIGH);
     }
 
     else if (LS2<1000 && RS2<1000)
     // Move foward if back sees white
     {
-      digitalWrite(LED2, HIGH);
-      delay(80);
-      digitalWrite(LED2, LOW);
+      digitalWrite(rigthMotor, HIGH);
+      //delay(80);
+      digitalWrite(leftMotor, HIGH);
     }
 
     else
     // Spin right if ONLY one of the front sensors see white
+    if(RS1 < 1000 || RS2 < 1000)
     {
-      digitalWrite(LED3, HIGH);
+      digitalWrite(leftMotor, HIGH);
       delay(80);
-      digitalWrite(LED3, LOW);
+      digitalWrite(rigthMotor, LOW);
     }
+    else if(LS1 < 1000 || LS2 < 1000)//turn left 
+    {
+      digitalWrite(rightMotor, HIGH);
+      delay(80);
+      digitalWrite(leftMotor, LOW);
+    }
+    
   }
   
 
@@ -67,9 +75,9 @@ void loop(){
     if (RS1<1000 && LS1<1000)
     // Move foward if the BOTH front sensors see white
     {
-      digitalWrite(LED2, HIGH);
+      digitalWrite(rightMotor, HIGH);
       delay(80);
-      digitalWrite(LED2, LOW);
+      digitalWrite(leftMotor, HIGH);
     }
   }
 }
