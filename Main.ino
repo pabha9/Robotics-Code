@@ -25,7 +25,7 @@ int leftMotor = 10;//left port
 int rightMotor = 11; //right port 
 
 
-int Power;  // Power going into motors
+int Power = 0;  // Power going into motors
 long cm;    // Distance in cm
 
 void setup() {
