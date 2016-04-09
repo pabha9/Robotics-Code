@@ -13,6 +13,17 @@ SabertoothSimplified ST1(SWSerial1); // Use SWSerial as the serial port.
 //SabertoothSimplified ST2(SWSerial2); // Use SWSerial as the serial port.
 //ultrasonic pin
 const int pingPin = 13;
+int IR1 = 6; //connected to digital 6
+int IR2 = 7;
+int IR3 = 8;
+int IR4 = 9;
+/*int LED1 = 12;  // move backwards
+int LED2 = 11;  // move fowards
+int LED3 = 10;  // move right
+int LED4 = 9;   // move left*/
+int leftMotor = 10;//left port
+int rightMotor = 11; //right port 
+
 
 int Power;  // Power going into motors
 long cm;    // Distance in cm
@@ -23,6 +34,8 @@ void setup() {
   //SWSerial2.begin(9600);
   //start the serial output
   Serial.begin(9600);
+  pinMode(leftMotor, OUTPUT);
+  pinMode(rightMotor, OUTPUT);
   
   delay(5000);  // delays the robot for 5 seconds before moving as per competition rules
 }
@@ -35,6 +48,10 @@ void loop() {
   {
     // Robot will push opponent is less than 10cm
     // !!! NEED TO ADD A PUSHING MECAHNISM TO THIS
+  int LS1 = readQD(IR1);
+  int LS2 = readQD(IR2);
+  int RS1 = readQD(IR3);
+  int RS2 = readQD(IR4);
     if (Power != 127)
     // If power isn't the maximum
     {
@@ -45,6 +62,54 @@ void loop() {
         ST1.motor(2, i);
         //ST2.motor(1, -1*i);
         //ST2.motor(2, -1*i);
+        if (LS1<1000 || LS2<1000)
+  {
+    if (LS1<1000 && RS1<1000)
+    // Move backwards if front sees white
+    {
+      digitalWrite(rightMotor, HIGH);
+      //delay(80);
+      digitalWrite(leftMotor, HIGH);
+    }
+
+    else if (LS2<1000 && RS2<1000)
+    // Move foward if back sees white
+    {
+      digitalWrite(rigthMotor, HIGH);
+      //delay(80);
+      digitalWrite(leftMotor, HIGH);
+    }
+
+    else
+    // Spin right if ONLY one of the front sensors see white
+    if(RS1 < 1000 || RS2 < 1000)
+    {
+      digitalWrite(leftMotor, HIGH);
+      delay(80);
+      digitalWrite(rigthMotor, LOW);
+    }
+    else if(LS1 < 1000 || LS2 < 1000)//turn left 
+    {
+      digitalWrite(rightMotor, HIGH);
+      delay(80);
+      digitalWrite(leftMotor, LOW);
+    }
+    
+  }
+  
+
+  else
+  {
+    if (RS1<1000 && LS1<1000)
+    // Move foward if the BOTH front sensors see white
+    {
+      digitalWrite(rightMotor, HIGH);
+      delay(80);
+      digitalWrite(leftMotor, HIGH);
+    }
+  }
+}
+
         delay(20);
       }
       Power=127;
@@ -114,3 +179,20 @@ long CheckDistance(void) // checks distance from a near object to the robot
   
   return cm;
 }
+int readQD(int sensor_number){
+  //Returns value from the QRE1113 
+  //Lower numbers mean more refleacive
+  //More than 3000 means nothing was reflected.
+  pinMode( sensor_number, OUTPUT );
+  digitalWrite( sensor_number, HIGH );  
+  delayMicroseconds(10);
+  pinMode( sensor_number, INPUT );
+
+  long time = micros();
+
+  //time how long the input is HIGH, but quit after 3ms as nothing happens after that
+  while (digitalRead(sensor_number) == HIGH && micros() - time < 3000); 
+  int diff = micros() - time;
+
+  return diff;
+}  
